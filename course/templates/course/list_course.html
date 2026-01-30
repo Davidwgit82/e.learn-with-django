@@ -1,0 +1,95 @@
+{% extends "base.html" %} 
+
+{% block title %}
+<title>
+    list des course
+</title>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-6 py-12">
+  <header class="mb-12 border-b border-gray-100 pb-6">
+    <h1 class="text-3xl font-light text-gray-900">
+      Tous nos <span class="font-semibold">cours</span>
+    </h1>
+    <p class="text-gray-500 text-sm mt-2">
+      Explorez nos programmes par catégorie
+    </p>
+  </header>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for course in courses %}
+    <div style="cursor: pointer;"
+      class="group border border-gray-100 bg-white p-6 hover:border-gray-700 hover:shadow-gray-200/50 duration-0 flex flex-col justify-between"
+    >
+      <div>
+        <span
+          class="text-[10px] font-bold tracking-[0.2em] text-blue-600 uppercase mb-3 block"
+        >
+          {{ course.category.name }}
+        </span>
+
+        <h3
+          class="text-xl font-medium text-gray-900 mb-3 group-hover:text-blue-600 transition-colors italic"
+        >
+          {{ course.title }}
+        </h3>
+
+        <p class="text-xs text-gray-400 mb-6 italic">
+          Par {{ course.teacher.username }}
+        </p>
+
+        <div class="space-y-2 mb-8">
+          <div class="flex justify-between items-center text-sm">
+            <span class="text-gray-500">Inscriptions</span>
+            <span class="text-gray-900 font-medium"
+              >{{ course.reserve_course.count }} / {{ course.places }}</span
+            >
+          </div>
+          <div class="flex justify-between items-center text-sm">
+            <span class="text-gray-500">Investissement</span>
+            <span class="text-gray-900 font-semibold"
+              >{{ course.prix }} FCFA</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="pt-6 border-t border-gray-50 flex items-center justify-between"
+      >
+        {% if course.is_available %}
+        <span
+          class="flex items-center text-[10px] font-bold text-green-600 uppercase tracking-widest"
+        >
+          <span
+            class="w-2 h-2 bg-green-600 rounded-full mr-2 animate-pulse"
+          ></span>
+          Disponible
+        </span>
+        {% else %}
+        <span
+          class="text-[10px] font-bold text-red-400 uppercase tracking-widest"
+        >
+          Complet
+        </span>
+        {% endif %}
+
+        <a
+          href="{{ course.get_absolute_url }}"
+          class="text-xs font-bold uppercase tracking-widest text-gray-900 hover:text-blue-600 transition-colors"
+        >
+          Détails &rarr;
+        </a>
+      </div>
+    </div>
+    {% empty %}
+    <div
+      class="col-span-full py-20 text-center border border-dashed border-gray-200"
+    >
+      <p class="text-gray-400 italic">Aucun cours disponible pour le moment.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

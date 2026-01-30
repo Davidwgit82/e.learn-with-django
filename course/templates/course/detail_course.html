@@ -1,0 +1,141 @@
+{% extends 'base.html' %} {% load static %} {% block title %}
+<title>detail | {{ course.title }}</title>
+{% endblock %} {% block content %}
+<div class="max-w-5xl mx-auto px-6 py-16">
+  {% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+    <div
+      class="alert alert-{{ message.tags }}"
+      style="padding: 10px; margin-bottom: 10px; border: 1px solid"
+    >
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div
+    class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-gray-100 pb-8 mb-12"
+  >
+    <div class="max-w-2xl">
+      <span
+        class="text-xs font-bold tracking-widest text-blue-600 uppercase mb-2 block"
+        >Détails du cours</span
+      >
+      <h1 class="text-4xl font-light text-gray-900 leading-tight">
+        {{ course.title }}
+      </h1>
+    </div>
+    <div class="mt-4 md:mt-0 text-right">
+      <div class="price-container">
+        {% if course.prix == 0 %}
+        <span class="text-gray-600"> free course </span>
+        {% else %}
+        <span class="text-3xl font-light text-gray-900">
+          {{ course.prix }}
+          <small class="text-sm font-semibold uppercase">FCFA</small>
+        </span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
+    <div class="lg:col-span-2">
+      <h3
+        class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-6"
+      >
+        À propos de ce programme
+      </h3>
+      <div class="text-gray-600 leading-relaxed text-lg space-y-6">
+        {{ course.description|linebreaks }}
+      </div>
+    </div>
+
+    <aside class="space-y-8">
+      <div class="border border-gray-100 p-8 bg-white shadow-sm">
+        <h3
+          class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-6 border-b pb-2"
+        >
+          Disponibilité
+        </h3>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex justify-between">
+            <span class="text-gray-500">Places totales</span>
+            <span class="font-medium text-gray-900">{{ course.places }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Inscriptions</span>
+            <span class="font-medium text-gray-900"
+              >{{ course.reserve_course.count }}</span
+            >
+          </div>
+          <div class="flex justify-between pt-4 border-t border-gray-50">
+            <span class="text-gray-900 font-medium">Places restantes</span>
+            <span
+              class="{% if nb_places_restantes > 0 %}text-green-600{% else %}text-red-600{% endif %} font-bold"
+            >
+              {{ nb_places_restantes }}
+            </span>
+          </div>
+        </div>
+
+        {% if not course.is_available %}
+        <button
+          disabled
+          class="w-full py-4 bg-gray-100 text-gray-400 font-medium tracking-widest uppercase text-xs cursor-not-allowed border border-gray-200"
+        >
+          COMPLET / SOLD OUT
+        </button>
+        {% else %} {% if user.is_authenticated %}
+        <a
+          href="{% url 'reserve-a-course' course.slug %}"
+          class="inline-block w-full text-center py-4 bg-blue-600 text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-900 transition-colors duration-0"
+        >
+          GET THIS COURSE!
+        </a>
+        {% else %}
+        <div class="p-3 bg-yellow-100 border border-yellow-400 text-yellow-700">
+          <a href="{% url 'login' %}" class="underline">log in</a>
+          pour réserver ce cours.
+        </div>
+        {% endif %} {% endif %}
+      </div>
+    </aside>
+  </div>
+
+  <div class="mt-24 border-t border-gray-100 pt-12">
+    <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-8">
+      Étudiants inscrits
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for res in course.reserve_course.all %}
+      <div
+        class="flex items-center space-x-4 p-4 border border-gray-50 hover:bg-gray-50 transition-colors"
+      >
+        <div
+          class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 font-bold"
+        >
+          {{ res.student.username|slice:":1"|upper }}
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-900">
+            {{ res.student.username }}
+          </p>
+          <p class="text-xs text-gray-400 italic">
+            Inscrit le {{ res.created_at|date:"d/m/Y" }}
+          </p>
+        </div>
+      </div>
+      {% empty %}
+      <p
+        class="col-span-3 text-center text-gray-400 italic py-8 border border-dashed border-gray-200"
+      >
+        aucune réservation pour le moment.
+      </p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+# Base de données
+db.sqlite3
+*.sqlite3
+
+# Environnement virtuel
+.venv/
+env/
+venv/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Fichiers sensibles
+.env
