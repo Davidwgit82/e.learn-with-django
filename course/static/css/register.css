@@ -1,0 +1,15 @@
+/* Style pour les inputs Django */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"] {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.3s;
+  background: transparent;
+}
+input:focus {
+  border-bottom-color: #2563eb;
+}

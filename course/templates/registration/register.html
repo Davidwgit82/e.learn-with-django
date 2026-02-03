@@ -1,5 +1,80 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
-<div>
-  <h1>register ..</h1>
+{% extends 'base.html' %} 
+
+{% load static %} 
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}" />
+{% endblock %} 
+
+{% block content %}
+<div class="max-w-md mx-auto my-12 px-6">
+  <header class="mb-10 text-center">
+    <h1 class="text-2xl font-light uppercase tracking-widest text-gray-900">
+      Inscription
+    </h1>
+    <p class="text-xs text-gray-400 mt-2 italic">
+      rejoignez la communauté e.learn.code
+    </p>
+  </header>
+
+  <form method="post" class="space-y-8">
+    {% csrf_token %}
+
+    <div class="space-y-4 p-4 bg-gray-50 border border-gray-100">
+      <label
+        class="text-[10px] font-bold uppercase tracking-widest text-gray-400"
+      >
+        Choisissez votre profil
+      </label>
+      <div class="flex gap-8">
+        {% for radio in form.role %}
+        <label class="flex items-center cursor-pointer group text-sm">
+          {{ radio.tag }}
+          <span
+            class="ml-2 text-gray-600 group-hover:text-blue-600 transition-colors lowercase"
+          >
+            {{ radio.choice_label }}
+          </span>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      {% for field in form %} {% if field.name != 'role' %}
+      <div class="flex flex-col">
+        <label
+          for="{{ field.id_for_label }}"
+          class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1"
+        >
+          {{ field.label }}
+        </label>
+        {{ field }} {% if field.errors %}
+        <p class="text-[10px] text-red-500 lowercase mt-1">
+          {{ field.errors.0 }}
+        </p>
+        {% endif %}
+      </div>
+      {% endif %} {% endfor %}
+    </div>
+
+    <div class="pt-6">
+      <button
+        type="submit"
+        class="w-full py-4 bg-blue-600 text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-900 transition-all duration-500"
+      >
+        créer mon compte
+      </button>
+    </div>
+  </form>
+
+  <div class="mt-8 text-center">
+    <p class="text-[10px] uppercase tracking-widest text-gray-400">
+      déjà un compte ?
+      <a href="{% url 'login' %}" class="text-blue-600 hover:underline ml-1"
+        >se connecter</a
+      >
+    </p>
+  </div>
 </div>
 {% endblock %}

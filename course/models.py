@@ -34,7 +34,7 @@ class Course(SlugBaseModel, TimeStamp):
         verbose_name = 'Cours'
     
     def get_absolute_url(self):
-        return reverse('detail-course', kwargs={'slug': self.slug})
+        return reverse('detail_course', kwargs={'slug': self.slug})
 
     def __str__(self):
         return f'{self.title} (par: {self.teacher.username})'
@@ -43,8 +43,10 @@ class Reservation(TimeStamp):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='enrollments')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='reserve_course')
 
+    """ empêcher l'etudiant de reserver un même cours deux fois. """
     class Meta:
         unique_together = ['student', 'course']
 
     def __str__(self):
-        return f'{self.student.username} réservé -> {self.course.title}'
+        return f'student {self.student.username} has reserved this course -> {self.course.title}'
+    

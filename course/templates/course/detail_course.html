@@ -62,7 +62,7 @@
 
         <div class="space-y-4 mb-8">
           <div class="flex justify-between">
-            <span class="text-gray-500">Places totales</span>
+            <span class="text-gray-500">Places disponibles</span>
             <span class="font-medium text-gray-900">{{ course.places }}</span>
           </div>
           <div class="flex justify-between">
@@ -90,15 +90,15 @@
         </button>
         {% else %} {% if user.is_authenticated %}
         <a
-          href="{% url 'reserve-a-course' course.slug %}"
-          class="inline-block w-full text-center py-4 bg-blue-600 text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-900 transition-colors duration-0"
+          href="{% url 'reserve_a_course' course.slug %}"
+          class="inline-block w-full text-center uppercase py-4 bg-blue-600 text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-900 transition-colors duration-0"
         >
-          GET THIS COURSE!
+          reserve
         </a>
         {% else %}
-        <div class="p-3 bg-yellow-100 border border-yellow-400 text-yellow-700">
-          <a href="{% url 'login' %}" class="underline">log in</a>
-          pour réserver ce cours.
+        <div class="text-yellow-700">
+          <a href="{% url 'login' %}" class="underline">authentifiez vous</a>
+          pour participer à ce cours.
         </div>
         {% endif %} {% endif %}
       </div>

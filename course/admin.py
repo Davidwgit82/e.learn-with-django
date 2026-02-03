@@ -62,4 +62,5 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('student', 'course',)
+    search_fields = ['student']
