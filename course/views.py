@@ -1,6 +1,7 @@
 from .check_auth import (
     is_instructor_check, is_student_check
 )
+from django.views import View
 from django.shortcuts import (
    get_object_or_404, redirect, render
 )
@@ -26,21 +27,26 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         context['categories'] = Category.objects.all()
-        context['courses'] = Course.objects.all()[:4]
+        context['courses'] = Course.objects.filter(is_active=True)[:4]
         context['reservations'] = Reservation.objects.count()
         return context
 
 def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, "compte créé.")
             return redirect('login')
+        else:
+            messages.error(request, "corriger les erreurs.")
     else:
         form = RegistrationForm()
-    return render(
-        request, 'registration/register.html', {'form': form}
-    )
+
+    return render(request, 'registration/register.html', {'form': form})
 
 class CourseListView(ListView):
     model = Course
@@ -49,7 +55,7 @@ class CourseListView(ListView):
     paginate_by = 3
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Course.objects.filter(is_active=True)
         category_slug = self.request.GET.get('category')
         
         if category_slug:
@@ -70,9 +76,11 @@ class DetailCourse(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # recupere l'instance : course
         course = self.get_object()
-        context['nb_places_restantes'] = course.places - course.reserve_course.count()
+        places_restantes = max(
+            course.places - course.reserve_course.count(), 0
+        )
+        context['nb_places_restantes'] = places_restantes
 
         return context
 
@@ -84,11 +92,14 @@ def get_my_course(request):
     my_course = request.user.course_teacher.all()
     return render(request, 'course/my_course_list.html', {'course' : my_course})'''
 
+
+""" seul l'instructeur crée et publie ses cours """
 class CreateCourseView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Course
     form_class = CreateCourseForm
     template_name = 'course/create_course.html'
     success_url = reverse_lazy('list_course')
+    raise_exception = True
 
     def test_func(self):
         return self.request.user.is_instructor
@@ -102,7 +113,7 @@ class CreateCourseView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return reverse_lazy('list_course')
 
 class MyCourseListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
-    login_url = 'login' # reidrection si non connecté
+    login_url = 'login'
     model = Course
     template_name = 'course/my_course_list.html'
     context_object_name = 'courses'
@@ -113,7 +124,10 @@ class MyCourseListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     
     def get_queryset(self):
         return Course.objects.filter(teacher=self.request.user)
-    
+
+"""
+seul les etudiants participent aux cours 
+""" 
 class MyReservationListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     login_url = 'login'
     model = Reservation
@@ -126,21 +140,46 @@ class MyReservationListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     
     def get_queryset(self):
         return Reservation.objects.filter(student=self.request.user)
+    
+class ReserveCourseView(LoginRequiredMixin, UserPassesTestMixin, View):
+    raise_exception = True 
 
-""" reserver un cours """
-@user_passes_test(is_student_check)
-def reserver(request, slug):
-    course = get_object_or_404(Course, slug=slug)
-    student = request.user
+    def test_func(self):
+        return self.request.user.is_student
 
-    if Reservation.objects.filter(student=student, course=course).exists():
-        messages.warning(request, 'vous avez deja reservé ce cours')
+    def post(self, request, slug):
+        course = get_object_or_404(
+            Course,
+            slug=slug,
+            is_active=True
+        )
+        student = request.user
 
-    elif not course.is_available:
-        messages.warning(request, "ce cours est complet")
+        if Reservation.objects.filter(
+            student=student,
+            course=course
+        ).exists():
+            messages.warning(
+                request,
+                "Vous avez déjà réservé ce cours."
+            )
 
-    else:
-        Reservation.objects.create(student=student, course=course)
-        messages.success(request, 'vous avez reservé ce cours.')
+        elif course.reserve_course.count() >= course.places:
+            messages.warning(
+                request,
+                "Ce cours est complet."
+            )
 
-    return redirect(course.get_absolute_url())
+        else:
+            Reservation.objects.create(
+                student=student,
+                course=course
+            )
+            messages.success(
+                request,
+                "Réservation effectuée."
+            )
+
+        return redirect(course.get_absolute_url())
+
+

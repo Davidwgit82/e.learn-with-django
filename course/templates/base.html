@@ -15,18 +15,20 @@
     <div id="content" class="min-h-screen flex flex-col">
       <header class="px-6 py-6 border-b border-gray-50">
         <div
-          class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4"
+          class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6"
         >
           <div class="flex-shrink-0">
             <a href="{% url 'index' %}">
-              <h1 class="text-2xl font-light tracking-tighter">
+              <h1
+                class="text-2xl font-light tracking-tighter text-center md:text-left"
+              >
                 easi/<span class="text-blue-600 font-semibold">learn</span>
               </h1>
             </a>
           </div>
 
           <nav
-            class="flex items-center gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500"
+            class="flex flex-wrap justify-center items-center gap-4 md:gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500"
           >
             <a
               href="{% url 'list_course' %}"
@@ -50,14 +52,15 @@
             <a
               href="{% url 'my_reservation' %}"
               class="hover:text-blue-600 transition-colors"
-              >reservations</a
+              >Réservations</a
             >
             {% endif %}
 
-            <div class="flex items-center gap-4 border-l pl-8 border-gray-100">
+            <div
+              class="flex items-center gap-4 border-t pt-4 w-full justify-center md:w-auto md:border-t-0 md:pt-0 md:border-l md:pl-8 border-gray-100"
+            >
               <span
-                style="font-size: 15px;"
-                class="text-gray-400 font-light italic normal-case tracking-normal"
+                class="text-gray-400 font-light italic normal-case tracking-normal text-sm"
               >
                 @{{ user.username }}
               </span>
@@ -105,6 +108,10 @@
           </a>
         </div>
       </footer>
+
+      {% block js %}
+      <script></script>
+      {% endblock %}
     </div>
   </body>
 </html>

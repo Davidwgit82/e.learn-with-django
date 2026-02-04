@@ -3,7 +3,7 @@
 {% endblock %} {% block content %}
 <div class="max-w-5xl mx-auto px-6 py-16">
   {% if messages %}
-  <div class="messages-container">
+  <div id="messages" class="messages-container">
     {% for message in messages %}
     <div
       class="alert alert-{{ message.tags }}"
@@ -90,12 +90,20 @@
         </button>
 
         {% elif user.is_authenticated %} {% if user.is_student %}
-        <a
-          href="{% url 'reserve_a_course' course.slug %}"
-          class="inline-block w-full text-center py-4 bg-blue-600 text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-900 transition-colors"
+        <form
+          method="post"
+          action="{% url 'reserve_a_course' course.slug %}"
+          class="w-full"
         >
-          Réserver
-        </a>
+          {% csrf_token %}
+          <button
+            type="submit"
+            class="inline-block w-full text-center py-4 bg-blue-600 text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-900 transition-colors duration-0"
+          >
+            participer
+          </button>
+        </form>
+
         {% else %}
         <div class="p-4 bg-gray-50 border border-gray-200 text-center">
           <p
@@ -109,7 +117,7 @@
           <a
             href="{% url 'login' %}"
             class="font-bold text-blue-600 underline uppercase tracking-tighter"
-            >Connectez-vous</a
+            >Connectez-vous comme étudiant</a
           >
           <p class="text-gray-500 text-xs mt-1">pour participer à ce cours.</p>
         </div>
@@ -151,4 +159,6 @@
     </div>
   </div>
 </div>
+{% endblock %} {% block js %}
+<script src="{% static 'js/course.js' %}" defer></script>
 {% endblock %}
