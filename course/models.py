@@ -25,7 +25,7 @@ class Course(SlugBaseModel, TimeStamp):
 
     @property
     def is_available(self):
-        ''' un cours est dispo si il est ouvert aux inscription et places dispo '''
+        # un cours est dispo si il est ouvert aux inscription et places dispo
         dispo_places = self.reserve_course.count() < self.places
         return self.is_active and dispo_places
 

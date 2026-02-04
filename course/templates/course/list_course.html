@@ -1,12 +1,6 @@
-{% extends "base.html" %} 
-
-{% block title %}
-<title>
-    list des course
-</title>
-{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}
+<title>list des course</title>
+{% endblock %} {% block content %}
 <div class="max-w-6xl mx-auto px-6 py-12">
   <header class="mb-12 border-b border-gray-100 pb-6">
     <h1 class="text-3xl font-light text-gray-900">
@@ -17,9 +11,66 @@
     </p>
   </header>
 
+  <!-- page de rechercher filtrée -->
+  <div class="mb-8">
+    <label
+      for="category"
+      class="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2"
+    >
+      Filtrer par catégorie
+    </label>
+    <div class="relative inline-block w-full md:w-64">
+      <select
+        name="category"
+        id="category"
+        onchange="window.location.href = this.value"
+        class="appearance-none w-full bg-white border border-gray-200 text-gray-900 py-3 px-4 pr-10 text-sm focus:border-gray-700 focus:outline-none transition-colors"
+      >
+        <option
+          value="{% url 'list_course' %}"
+          {%
+          if
+          not
+          current_category
+          %}selected{%
+          endif
+          %}
+        >
+          Toutes les catégories
+        </option>
+
+        {% for cat in categories %}
+        <option
+          value="?category={{ cat.slug }}"
+          {%
+          if
+          current_category=""
+          ="cat.slug"
+          %}selected{%
+          endif
+          %}
+        >
+          {{ cat.name }}
+        </option>
+        {% endfor %}
+      </select>
+
+      <div
+        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400"
+      >
+        <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+          <path
+            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     {% for course in courses %}
-    <div style="cursor: pointer;"
+    <div
+      style="cursor: pointer"
       class="group border border-gray-100 bg-white p-6 hover:border-gray-700 hover:shadow-gray-200/50 duration-0 flex flex-col justify-between"
     >
       <div>
@@ -91,5 +142,49 @@
     </div>
     {% endfor %}
   </div>
+
+  <!-- pagination -->
+  <div>
+    {% if is_paginated %}
+    <div class="mt-16 flex justify-center">
+      <nav class="inline-flex items-center space-x-2">
+        {% if page_obj.has_previous %}
+        <a
+          href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}"
+          class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-gray-900 border border-gray-200 hover:border-gray-700 transition-colors"
+        >
+          &larr; Précédent
+        </a>
+        {% else %}
+        <span
+          class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-gray-300 border border-gray-100 cursor-not-allowed"
+        >
+          &larr; Précédent
+        </span>
+        {% endif %}
+
+        <span class="px-4 py-2 text-xs font-medium text-gray-500 italic">
+          Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a
+          href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}"
+          class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-gray-900 border border-gray-200 hover:border-gray-700 transition-colors"
+        >
+          Suivant &rarr;
+        </a>
+        {% else %}
+        <span
+          class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-gray-300 border border-gray-100 cursor-not-allowed"
+        >
+          Suivant &rarr;
+        </span>
+        {% endif %}
+      </nav>
+    </div>
+    {% endif %}
+  </div>
+
+  {% endblock %}
 </div>
-{% endblock %}

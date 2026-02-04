@@ -88,19 +88,32 @@
         >
           COMPLET / SOLD OUT
         </button>
-        {% else %} {% if user.is_authenticated %}
+
+        {% elif user.is_authenticated %} {% if user.is_student %}
         <a
           href="{% url 'reserve_a_course' course.slug %}"
-          class="inline-block w-full text-center uppercase py-4 bg-blue-600 text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-900 transition-colors duration-0"
+          class="inline-block w-full text-center py-4 bg-blue-600 text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-900 transition-colors"
         >
-          reserve
+          Réserver
         </a>
         {% else %}
-        <div class="text-yellow-700">
-          <a href="{% url 'login' %}" class="underline">authentifiez vous</a>
-          pour participer à ce cours.
+        <div class="p-4 bg-gray-50 border border-gray-200 text-center">
+          <p
+            class="text-[10px] font-bold text-gray-500 uppercase tracking-widest leading-relaxed"
+          >
+            Accès restreint aux comptes étudiants
+          </p>
         </div>
-        {% endif %} {% endif %}
+        {% endif %} {% else %}
+        <div class="text-sm text-center">
+          <a
+            href="{% url 'login' %}"
+            class="font-bold text-blue-600 underline uppercase tracking-tighter"
+            >Connectez-vous</a
+          >
+          <p class="text-gray-500 text-xs mt-1">pour participer à ce cours.</p>
+        </div>
+        {% endif %}
       </div>
     </aside>
   </div>
