@@ -117,7 +117,7 @@ class MyCourseListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 class MyReservationListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     login_url = 'login'
     model = Reservation
-    template_name = 'course/my_reservation.html'
+    template_name = 'course/my_reservation_list.html'
     context_object_name = 'reservation'
     raise_exception = False
 

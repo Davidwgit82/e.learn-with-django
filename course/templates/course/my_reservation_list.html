@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>mes reservations | easi/learn</title>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-12">
+  <header class="mb-12 border-b border-gray-100 pb-6">
+    <h1 class="text-3xl font-light text-gray-900">
+      mes <span class="font-semibold">réservations</span>
+    </h1>
+    <p class="text-gray-500 text-sm mt-2 italic">
+      tous les programmes auxquels vous êtes inscrit.
+    </p>
+  </header>
+
+  <div class="space-y-6">
+    {% for res in reservation %}
+    <div class="group border border-gray-100 bg-white p-6 hover:border-gray-700 transition-all duration-300 flex flex-col md:flex-row justify-between items-center">
+      
+      <div class="flex flex-col">
+        <span class="text-[10px] font-bold tracking-[0.2em] text-blue-600 uppercase mb-1">
+          {{ res.course.category.name }}
+        </span>
+        <h3 class="text-xl font-medium text-gray-900 italic">
+          {{ res.course.title }}
+        </h3>
+        <p class="text-xs text-gray-400 mt-1">
+          Inscrit le {{ res.created_at|date:"d F Y" }}
+        </p>
+      </div>
+
+      <div class="mt-6 md:mt-0 flex items-center gap-8">
+        <div class="text-right">
+          <p class="text-[10px] uppercase tracking-widest text-gray-400">Investissement</p>
+          <p class="text-sm font-semibold text-gray-900">{{ res.course.prix }} FCFA</p>
+        </div>
+
+        <a 
+          href="{{ res.course.get_absolute_url }}" 
+          class="px-6 py-3 bg-gray-900 text-white text-[10px] font-bold uppercase tracking-widest hover:bg-blue-600 transition-colors"
+        >
+          Accéder au cours
+        </a>
+      </div>
+
+    </div>
+    {% empty %}
+    <div class="py-20 text-center border border-dashed border-gray-200">
+      <p class="text-gray-400 italic mb-6">Vous n'avez pas encore réservé de cours.</p>
+      <a href="{% url 'list_course' %}" class="text-xs font-bold uppercase tracking-widest text-blue-600 hover:text-gray-900">
+        le catalogue &rarr;
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

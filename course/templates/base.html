@@ -13,75 +13,96 @@
   </head>
   <body class="bg-white text-gray-900">
     <div id="content" class="min-h-screen flex flex-col">
-      <header class="px-6 py-4">
-        <div class="flex justify-between items-center">
-          <a href="{% url 'index' %}">
-            <h1 class="text-2xl font-light tracking-tighter">
-              easi/<span class="text-blue-600">learn</span>
-            </h1>
-          </a>
+      <header class="px-6 py-6 border-b border-gray-50">
+        <div
+          class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4"
+        >
+          <div class="flex-shrink-0">
+            <a href="{% url 'index' %}">
+              <h1 class="text-2xl font-light tracking-tighter">
+                easi/<span class="text-blue-600 font-semibold">learn</span>
+              </h1>
+            </a>
+          </div>
 
           <nav
-            class="text-xs font-medium uppercase tracking-widest text-gray-500"
+            class="flex items-center gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500"
           >
-            {% if user.is_authenticated %}
-            <div class="flex items-center gap-4">
-              <span class="text-gray-400 font-light italic"
-                >welcome, {{ user.username }}</span
-              >
-              {% comment %}
-              <a href="{% url 'my_course' %}" class="hover:text-blue-600 transition-colors"
-                >Mes cours</a
-              >
-              {% endcomment %}
-              <a href="{% url 'my_course' %}" class="hover:text-blue-600 transition-colors"
-                >Cours crée</a
-              >
-              {% comment %}
-              <a href="{% url 'my_reservation' %}" class="hover:text-blue-600 transition-colors"
-                >cours reservés</a
-              >
-              {% endcomment %}
-              <button class="btn btn-link text-red-400 hover:text-red-600">
-                <form method="post" action="{% url 'logout' %}">
-                  {% csrf_token %}
-                  <input type="submit" value="log out" />
-                </form>
-              </button>
-            </div>
+            <a
+              href="{% url 'list_course' %}"
+              class="text-gray-900 hover:text-blue-600 transition-colors"
+            >
+              Tous les cours
+            </a>
+
+            {% if user.is_authenticated %} {% if user.is_instructor %}
+            <a
+              href="{% url 'my_course' %}"
+              class="hover:text-blue-600 transition-colors"
+              >Mes créations</a
+            >
+            <a
+              href="{% url 'create_course' %}"
+              class="text-blue-600 hover:text-gray-900 transition-colors"
+              >Publier</a
+            >
             {% else %}
-            <div class="flex gap-6">
+            <a
+              href="{% url 'my_reservation' %}"
+              class="hover:text-blue-600 transition-colors"
+              >reservations</a
+            >
+            {% endif %}
+
+            <div class="flex items-center gap-4 border-l pl-8 border-gray-100">
+              <span
+                style="font-size: 15px;"
+                class="text-gray-400 font-light italic normal-case tracking-normal"
+              >
+                @{{ user.username }}
+              </span>
+              <form method="post" action="{% url 'logout' %}" class="inline">
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="text-red-400 hover:text-red-600 transition-colors font-bold uppercase tracking-widest"
+                >
+                  Logout
+                </button>
+              </form>
+            </div>
+
+            {% else %}
+            <div class="flex items-center gap-6">
               <a
                 href="{% url 'login' %}"
                 class="hover:text-blue-600 transition-colors"
-                >Se connecter</a
+                >Login</a
               >
               <a
                 href="{% url 'register' %}"
-                class="hover:text-blue-600 transition-colors border-l border-gray-200 pl-6"
-                >S'inscrire</a
+                class="border border-gray-900 px-4 py-2 hover:bg-gray-900 hover:text-white transition-all"
               >
+                S'inscrire
+              </a>
             </div>
             {% endif %}
           </nav>
         </div>
-
-        <hr class="mt-4 border-gray-100 opacity-50" />
       </header>
 
       <main class="flex-grow">{% block content %} {% endblock %}</main>
 
       <footer class="p-8 border-t border-gray-50 text-center">
         <div class="text-[10px] uppercase tracking-[0.3em] text-gray-400">
-          e-learn | written
+          e-learn | written with
           <a
-            style="text-decoration: underline"
+            href="https://www.djangoproject.com/"
             target="_blank"
-            rel="noopener noreferrer"
-            href="https://www.djangoproject.com/start/"
-            class="text-gray-600 hover:text-green-600 transition-colors"
-            ><b> Django </b></a
+            class="text-gray-600 hover:text-green-600 transition-colors font-bold underline"
           >
+            Django
+          </a>
         </div>
       </footer>
     </div>
