@@ -84,42 +84,22 @@ def get_my_course(request):
     my_course = request.user.course_teacher.all()
     return render(request, 'course/my_course_list.html', {'course' : my_course})'''
 
-
-@user_passes_test(is_instructor_check)
-def create_course(request):
-    if request.method == 'POST':
-        form = CreateCourseForm(request.POST)
-        if form.is_valid():
-            course = form.save(commit=False)
-            course.teacher = request.user
-            course.save()
-            return redirect('list_course')
-    else:
-        form = CreateCourseForm()
-    return render(
-        request, 'course/create_course.html', {'form': form}
-    )
-
 class CreateCourseView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Course
     form_class = CreateCourseForm
     template_name = 'course/create_course.html'
+    success_url = reverse_lazy('list_course')
 
     def test_func(self):
-        return self.request.user.is_authenticated and self.request.user.is_instructor
-    
+        return self.request.user.is_instructor
+
     def form_valid(self, form):
         form.instance.teacher = self.request.user
-        messages.success(self.request, 'cours publié.')
-        
-        super().form_valid(form)
-        return redirect(self.get_success_url())
-    
-    def form_invalid(self, form):
-        return super().form_invalid(form)
-    
+        messages.success(self.request, 'votre cours a été crée et publié.')
+        return super().form_valid(form)
+
     def get_success_url(self):
-        return self.request.META.get('HTTP_REFERER', reverse('list_course'))
+        return reverse_lazy('list_course')
 
 class MyCourseListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     login_url = 'login' # reidrection si non connecté
