@@ -103,7 +103,6 @@
 {% endblock %}
 
 <style>
-  /* Cible tous les champs de saisie du formulaire */
   form input[type="text"],
   form input[type="email"],
   form input[type="password"],
@@ -111,10 +110,10 @@
   form select,
   form textarea {
     width: 100%;
-    padding: 12px 0; /* Padding vertical pour aérer */
+    padding: 12px 0; 
     background-color: transparent;
     border: none;
-    border-bottom: 1px solid #e5e7eb; /* Bordure légère uniquement en bas */
+    border-bottom: 1px solid #e5e7eb; 
     outline: none;
     font-size: 0.875rem;
     color: #111827;
@@ -122,33 +121,21 @@
   }
 
   form input[type="password"] {
-    padding-right: 30px !important; /* Laisse de la place pour l'oeil */
+    padding-right: 30px !important; 
   }
 
-  /* Ton reste de CSS... */
   form input[type="text"], 
   form input[type="email"],
 
-  /* Effet au survol et au clic (focus) */
   form input:focus,
   form select:focus {
-    border-bottom: 1px solid #2563eb; /* Le bleu de ton bouton */
+    border-bottom: 1px solid #2563eb;
   }
 
-  /* Style spécifique pour les boutons radio (profil) */
   input[type="radio"] {
     accent-color: #2563eb;
     width: 14px;
     height: 14px;
     cursor: pointer;
   }
-
-  /* Optionnel : si tu préfères des bordures complètes (encadrées) */
-  /*
-  form input {
-    border: 1px solid #e5e7eb !important;
-    padding: 10px !important;
-    border-radius: 0px !important;
-  }
-  */
 </style>

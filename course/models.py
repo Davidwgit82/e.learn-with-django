@@ -43,12 +43,10 @@ class Reservation(TimeStamp):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='enrollments')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='reserve_course')
 
-    """ empêcher l'etudiant de reserver un même cours deux fois. """
     class Meta:
         unique_together = ['student', 'course']
         ordering = ['-created_at']
-        # ou 
 
     def __str__(self):
-        return f'student {self.student.username} has reserved this course -> {self.course.title}'
+        return f'student {self.student.username} a reservé ce cours : {self.course.title}'
     

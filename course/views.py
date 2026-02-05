@@ -1,6 +1,3 @@
-from .check_auth import (
-    is_instructor_check, is_student_check
-)
 from django.db.models import Count
 from django.views import View
 from django.shortcuts import (
@@ -10,7 +7,7 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin, 
     UserPassesTestMixin
 )
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import (
     TemplateView, ListView, DetailView, CreateView, DeleteView, UpdateView
@@ -19,7 +16,6 @@ from .forms import RegistrationForm, CreateCourseForm
 from .models import (
     Category, Course, Reservation
 )
-from django.contrib.auth.decorators import login_required, user_passes_test
 
 class IndexView(TemplateView):
     template_name = 'index.html'
@@ -200,7 +196,7 @@ class CreateReservationView(LoginRequiredMixin, UserPassesTestMixin, View):
         ).exists():
             messages.warning(
                 request,
-                "Vous avez déjà réservé ce cours."
+                "vous avez déjà réservé ce cours."
             )
 
         elif course.reserve_course.count() >= course.places:
@@ -227,10 +223,6 @@ class DeleteReservationView(LoginRequiredMixin, UserPassesTestMixin, DeleteView)
     success_url = reverse_lazy('my_reservation')
 
     def get_object(self, queryset=None):
-        """
-        récupérer la réservation en utilisant le slug du cours
-        et l'étudiant connecté.
-        """
         return get_object_or_404(
             Reservation, 
             course__slug=self.kwargs.get('slug'), 

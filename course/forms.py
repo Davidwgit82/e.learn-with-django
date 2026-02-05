@@ -56,18 +56,17 @@ class CreateCourseForm(forms.ModelForm):
     def clean_prix(self):
         prix = self.cleaned_data.get('prix')
         if prix is not None and prix < 0:
-            raise forms.ValidationError("Le prix ne peut pas être négatif.")
+            raise forms.ValidationError("entrer un prix normal")
         return prix
 
     def clean_places(self):
         places = self.cleaned_data.get('places')
         if places is not None and places < 1:
-            raise forms.ValidationError("Le nombre de places doit être supérieur à 0.")
+            raise forms.ValidationError("entrer un nombre de places normales")
         return places
 
     def clean_is_active(self):
         value = self.cleaned_data.get('is_active')
         if not isinstance(value, bool):
-            raise forms.ValidationError("Valeur invalide.")
+            raise forms.ValidationError("invalid value.")
         return value
-
