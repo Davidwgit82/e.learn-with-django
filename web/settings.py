@@ -9,22 +9,20 @@ mimetypes.add_type("application/javascript", ".js", True)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 MEDIA_URL = '/media/'
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'votre-cle-de-dev-tres-longue')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'course.User'
-
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
@@ -48,9 +46,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-     # placé avant auth et message   
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -152,21 +148,15 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Gestion dynamique de l'hôte Render
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-# Emplacement final des fichiers statiques pour la production
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Optionnel : Empêcher le debug toolbar de s'afficher en production
 if not DEBUG:
     if 'debug_toolbar' in INSTALLED_APPS:
         INSTALLED_APPS.remove('debug_toolbar')
     MIDDLEWARE = [m for m in MIDDLEWARE if 'debug_toolbar' not in m]
-
-    
