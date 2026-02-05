@@ -143,7 +143,6 @@ class UpdateCourseView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         messages.success(self.request, 'les modifications ont été enregistrées.')
         return super().form_valid(form)
 
-
 class MyCourseListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     login_url = 'login'
     model = Course
@@ -221,7 +220,6 @@ class CreateReservationView(LoginRequiredMixin, UserPassesTestMixin, View):
             )
 
         return redirect(course.get_absolute_url())
-
 
 class DeleteReservationView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Reservation

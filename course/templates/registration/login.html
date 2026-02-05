@@ -1,16 +1,8 @@
-{% extends 'base.html' %} 
-
-{% load static %}
-
-{% block title %}
+{% extends 'base.html' %} {% load static %} {% block title %}
 <title>connexion | e.learn.code</title>
-{% endblock %} 
-
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/login.css' %}">
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}" />
+{% endblock %} {% block content %}
 <div class="max-w-md mx-auto my-20 px-6">
   <div class="mb-10 text-center">
     <h2 class="text-2xl font-light uppercase tracking-widest text-gray-900">
@@ -66,3 +58,32 @@
   </div>
 </div>
 {% endblock %}
+
+<style>
+  form input[type="text"],
+  form input[type="password"],
+  form input[type="email"] {
+    width: 100%;
+    padding: 12px 0;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+    outline: none;
+    font-size: 0.875rem;
+    color: #111827;
+    transition: border-color 0.3s ease;
+    border-radius: 0;
+  }
+
+  form input:focus {
+    border-bottom: 1px solid #2563eb;
+  }
+
+  button[type="submit"] {
+    transition: all 0s !important;
+  }
+
+  .border-red-100 {
+    border-width: 0 0 0 2px;
+  }
+</style>
