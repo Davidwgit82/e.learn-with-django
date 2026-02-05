@@ -7,7 +7,7 @@ urlpatterns = [
     path('courses/', views.CourseListView.as_view(), name='list_course'),
     path('courses/me/', views.MyCourseListView.as_view(), name='my_course'),
     path('courses/my-reservations/', views.MyReservationListView.as_view(), name='my_reservation'),
-    path('courses/<slug:slug>/', views.DetailCourse.as_view(), name='detail_course'),
+    path('courses/<slug:slug>/', views.DetailCourseView.as_view(), name='detail_course'),
     path('courses/<slug:slug>/reserver/', views.ReserveCourseView.as_view(), name='reserve_a_course'),
     path('auth/register/', views.register_view, name='register')
 ]

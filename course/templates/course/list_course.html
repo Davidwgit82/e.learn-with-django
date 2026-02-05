@@ -94,7 +94,7 @@
           <div class="flex justify-between items-center text-sm">
             <span class="text-gray-500">Inscriptions</span>
             <span class="text-gray-900 font-medium"
-              >{{ course.reserve_course.count }} / {{ course.places }}</span
+              >{{ course.nb_inscrits }} / {{ course.places }}</span
             >
           </div>
           <div class="flex justify-between items-center text-sm">
@@ -109,7 +109,7 @@
       <div
         class="pt-6 border-t border-gray-50 flex items-center justify-between"
       >
-        {% if course.is_available %}
+        {% if course.is_active and course.nb_inscrits < course.places %}
         <span
           class="flex items-center text-[10px] font-bold text-green-600 uppercase tracking-widest"
         >

@@ -1,6 +1,7 @@
 from .check_auth import (
     is_instructor_check, is_student_check
 )
+from django.db.models import Count
 from django.views import View
 from django.shortcuts import (
    get_object_or_404, redirect, render
@@ -27,7 +28,9 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         context['categories'] = Category.objects.all()
-        context['courses'] = Course.objects.filter(is_active=True)[:4]
+        context['courses'] = Course.objects.filter(is_active=True)[:4]\
+            .select_related('category', 'teacher')\
+            .annotate(nb_inscrits=Count('reserve_course'))
         context['reservations'] = Reservation.objects.count()
         return context
 
@@ -55,7 +58,11 @@ class CourseListView(ListView):
     paginate_by = 3
 
     def get_queryset(self):
-        queryset = Course.objects.filter(is_active=True)
+        queryset = Course.objects.filter(is_active=True).select_related(
+            'teacher',
+            'category'
+        )
+        queryset = queryset.annotate(nb_inscrits=Count('reserve_course'))
         category_slug = self.request.GET.get('category')
         
         if category_slug:
@@ -69,18 +76,21 @@ class CourseListView(ListView):
         context['current_category'] = self.request.GET.get('category')
         return context
     
-class DetailCourse(DetailView):
+class DetailCourseView(DetailView):
     model = Course
     template_name = 'course/detail_course.html'
     context_object_name = 'course'
 
+    def get_queryset(self):
+        return Course.objects.annotate(
+            nb_inscrits=Count('reserve_course')
+        ).select_related('teacher', 'category')\
+            .prefetch_related('reserve_course__student')\
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        course = self.get_object()
-        places_restantes = max(
-            course.places - course.reserve_course.count(), 0
-        )
-        context['nb_places_restantes'] = places_restantes
+        course = self.object
+        context['nb_places_restantes'] = max(course.places - course.nb_inscrits, 0)
 
         return context
 
@@ -123,7 +133,10 @@ class MyCourseListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return self.request.user.is_instructor
     
     def get_queryset(self):
-        return Course.objects.filter(teacher=self.request.user)
+        return Course.objects.filter(teacher=self.request.user).select_related(
+            'category'
+        ).annotate(nb_inscrits=Count('reserve_course')) \
+        .order_by('-created_at')
 
 """
 seul les etudiants participent aux cours 
@@ -139,7 +152,10 @@ class MyReservationListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return self.request.user.is_student
     
     def get_queryset(self):
-        return Reservation.objects.filter(student=self.request.user)
+        return Reservation.objects.filter(student=self.request.user).select_related(
+            'course',          
+            'course__category' 
+        )
     
 class ReserveCourseView(LoginRequiredMixin, UserPassesTestMixin, View):
     raise_exception = True 
