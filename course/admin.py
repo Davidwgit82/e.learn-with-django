@@ -1,66 +1,89 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.db.models import Count
 
-# Register your models here.
+from .models import User, Category, Course, Reservation
 
-from .models import Category, Course, Reservation, User
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    # On ajoute tes champs spécifiques dans l'interface admin
     fieldsets = UserAdmin.fieldsets + (
-        ('rôles', 
-        {'fields': 
-            ('is_instructor', 'is_student')
+        ('rôles', {
+            'fields': ('is_instructor', 'is_student')
         }),
     )
-    list_display = ('username', 'email', 'is_instructor', 'is_student', 'is_staff')
-    list_filter = ('is_instructor', 'is_student', 'is_staff', 'is_superuser')
 
-""" tables principales """
+    list_display = (
+        'username', 'email',
+        'is_instructor', 'is_student',
+        'is_staff'
+    )
 
-""" inline """
-class ReservationInline(admin.TabularInline):
-    model = Reservation
-    extra = 1
-
-class CourseInline(admin.TabularInline):
-    model = Course
-    extra = 1
+    list_filter = (
+        'is_instructor', 'is_student',
+        'is_staff', 'is_superuser'
+    )
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)
-    list_filter = ('name',)
-    search_fields = ['name']
-    inlines = [CourseInline]
+    search_fields = ('name',)
+
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'is_active', 'get_availability', 'prix', 'places')
+
+    list_display = (
+        'title',
+        'teacher',
+        'category',
+        'is_active',
+        'nb_inscrits_display',
+        'places',
+        'availability_display',
+        'prix',
+    )
+
+    list_filter = ('is_active', 'category')
     list_editable = ('is_active',)
-    
-    readonly_fields = ('get_availability',)
+
+    readonly_fields = (
+        'availability_display',
+        'nb_inscrits_display',
+    )
 
     fieldsets = (
-        ('control administratif', {
-            'fields': ('is_active', 'get_availability'),
-            'description': 'Suspendez le cours manuellement ici.'
+        ('controle ad', {
+            'fields': ('is_active', 'availability_display'),
         }),
-        ('info général', {
-            'fields': ('title', 'teacher', 'category', 'description')
+        ('Info general', {
+            'fields': ('title', 'teacher', 'category', 'description'),
         }),
-        ('logitsic & prix', {
-            'fields': ('prix', 'places'),
+        ('Logistique & prix', {
+            'fields': ('prix', 'places', 'nb_inscrits_display'),
         }),
     )
 
-    def get_availability(self, obj):
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.annotate(nb_inscrits=Count('reserve_course'))
+
+    @admin.display(description="Nb inscrits", ordering='nb_inscrits')
+    def nb_inscrits_display(self, obj):
+        return getattr(obj, 'nb_inscrits', 0)
+
+    @admin.display(boolean=True, description="Disponible")
+    def availability_display(self, obj):
         return obj.is_available
-    get_availability.boolean = True
-    get_availability.short_description = 'statut' 
+    
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ('student', 'course',)
-    search_fields = ['student']
+    list_display = ('student', 'course', 'created_at')
+    search_fields = (
+        'student__username',
+        'course__title'
+    )
+    list_filter = ('course',)
+
+
