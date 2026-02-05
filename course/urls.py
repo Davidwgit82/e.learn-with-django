@@ -19,4 +19,5 @@ urlpatterns = [
     path('courses/<slug:slug>/', views.DetailCourseView.as_view(), name='detail_course'),
     path('courses/<slug:slug>/reserver/', views.CreateReservationView.as_view(), name='reserve_a_course'),
     path('courses/<slug:slug>/delete/', views.DeleteReservationView.as_view(), name='delete_my_reservation'),
+    path('courses/<slug:slug>/edit/', views.UpdateCourseView.as_view(), name='update_my_course'),
 ]

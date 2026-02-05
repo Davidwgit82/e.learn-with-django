@@ -1,85 +1,156 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
-<div class="max-w-6xl mx-auto mt-10 px-4">
-  <div class="flex justify-between items-center mb-8">
-    <h2 class="text-3xl font-bold text-gray-800">Mes Cours créés</h2>
+{% extends "base.html" %} {% load static %} 
+{% block title %}
+<title>mes programmes |
+instructeur</title>{% endblock %} 
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-6 py-12">
+  <header
+    class="mb-12 border-b border-gray-100 pb-8 flex flex-col md:flex-row justify-between items-end gap-6"
+  >
+    <div>
+      <h1 class="text-3xl font-light text-gray-900 uppercase tracking-tight">
+        Mes Programmes
+      </h1>
+      <p class="text-gray-400 text-[10px] uppercase tracking-[0.2em] mt-2">
+        gestion de vos contenus et inscriptions
+      </p>
+    </div>
+
     <a
       href="{% url 'create_course' %}"
-      class="bg-blue-600 text-white px-4 py-2 rounded-none hover:bg-blue-700 transition duration-0"
+      class="px-8 py-4 bg-gray-900 text-white text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-blue-600 transition-all duration-0"
     >
-      Créer un nouveau cours
+      + créer un programme
     </a>
-  </div>
+  </header>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
     {% for course in courses %}
     <div
-      class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-lg transition"
+      class="group flex flex-col border border-gray-100 bg-white hover:border-gray-900 transition-all duration-300"
     >
-      <div class="p-6">
-        <div class="flex justify-between items-start mb-2">
+      <div class="p-8 flex-grow">
+        <div class="flex justify-between items-start mb-6">
           <span
-            class="text-xs font-semibold uppercase px-2 py-1 bg-gray-100 text-gray-600 rounded"
+            class="text-[9px] font-bold uppercase tracking-[0.2em] text-blue-600 border-b border-blue-100 pb-1"
           >
             {{ course.category.name }}
           </span>
-          <span class="text-lg font-bold text-blue-600">
+          <span class="text-sm font-bold text-gray-900 italic">
             {{ course.prix }} FCFA
           </span>
         </div>
 
-        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ course.title }}</h3>
-        <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+        <h3
+          class="text-xl font-medium text-gray-900 mb-4 group-hover:text-blue-600 transition-colors"
+        >
+          {{ course.title }}
+        </h3>
+
+        <p
+          class="text-xs text-gray-500 leading-relaxed mb-6 line-clamp-3 italic"
+        >
           {{ course.description }}
         </p>
 
         <div
-          class="flex items-center justify-between mt-4 pt-4 border-t border-gray-50"
+          class="pt-6 border-t border-gray-50 flex items-center justify-between"
         >
           <div class="flex flex-col">
-            <span class="text-xs text-gray-400">Places occupées</span>
-            <span class="font-medium"
-              >{{ course.nb_inscrits }} / {{ course.places }}</span
+            <span
+              class="text-[9px] uppercase tracking-widest text-gray-400 mb-1"
+              >Inscriptions</span
             >
+            <span class="text-xs font-bold text-gray-900">
+              {{ course.nb_inscrits }}
+              <span class="text-gray-300 font-light">/</span> 
+              {{ course.places }}
+            </span>
           </div>
 
-          <div class="text-right">
+          <div>
             {% if course.is_active and course.nb_inscrits < course.places %}
             <span
-              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+              class="text-[9px] font-bold uppercase tracking-widest text-green-500"
+              >Ouvert</span
             >
-              Ouvert
-            </span>
             {% else %}
             <span
-              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+              class="text-[9px] font-bold uppercase tracking-widest text-red-400"
+              >Complet</span
             >
-              Complet / Fermé
-            </span>
             {% endif %}
           </div>
         </div>
       </div>
 
-      <div class="bg-gray-50 px-6 py-3 flex justify-around">
+      <div class="border-t border-gray-100 flex divide-x divide-gray-100">
         <a
           href="{{ course.get_absolute_url }}"
-          class="text-sm text-blue-600 font-semibold hover:text-blue-800"
-          >Détails</a
+          class="flex-1 py-4 text-center text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all duration-0"
         >
+          voir
+        </a>
         <a
-          href="#"
-          class="text-sm text-gray-600 font-semibold hover:text-gray-800"
-          >Modifier</a
+          href="{% url 'update_my_course' course.slug %}"
+          class="flex-1 py-4 text-center text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-blue-600 hover:bg-gray-50 transition-all duration-0"
         >
+          modifier
+        </a>
       </div>
     </div>
     {% empty %}
     <div
-      class="col-span-full text-center py-20 bg-gray-50 rounded-xl border-2 border-dashed"
+      class="col-span-full py-32 text-center border border-dashed border-gray-200"
     >
-      <p class="text-gray-500">Vous n'avez pas encore publié de cours.</p>
+      <p class="text-[10px] uppercase tracking-[0.3em] text-gray-400">
+        aucun programme actif pour le moment.
+      </p>
     </div>
     {% endfor %}
   </div>
 </div>
+
+  <div>
+    {% if is_paginated %}
+    <div class="mt-16 flex justify-center">
+      <nav class="inline-flex items-center space-x-2">
+        {% if page_obj.has_previous %}
+        <a
+          href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}"
+          class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-gray-900 border border-gray-200 hover:border-gray-700 transition-colors"
+        >
+          &larr; Précédent
+        </a>
+        {% else %}
+        <span
+          class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-gray-300 border border-gray-100 cursor-not-allowed"
+        >
+          &larr; Précédent
+        </span>
+        {% endif %}
+
+        <span class="px-4 py-2 text-xs font-medium text-gray-500 italic">
+          Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a
+          href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}"
+          class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-gray-900 border border-gray-200 hover:border-gray-700 transition-colors"
+        >
+          Suivant &rarr;
+        </a>
+        {% else %}
+        <span
+          class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-gray-300 border border-gray-100 cursor-not-allowed"
+        >
+          Suivant &rarr;
+        </span>
+        {% endif %}
+      </nav>
+    </div>
+    {% endif %}
+  </div>
 {% endblock %}

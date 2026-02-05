@@ -1,0 +1,76 @@
+{% extends 'base.html' %} {% block content %}
+<div class="max-w-2xl mx-auto my-16 px-6">
+  <header class="mb-12 text-center">
+    <h1 class="text-2xl font-light uppercase tracking-[0.3em] text-gray-900">
+      Modifier le <span class="font-bold">Programme</span>
+    </h1>
+    <p class="text-[10px] text-gray-400 mt-2 italic tracking-widest">
+      édition de : {{ object.title }}
+    </p>
+  </header>
+
+  <form method="post" class="space-y-10">
+    {% csrf_token %}
+
+    <div class="space-y-8">
+      {% for field in form %}
+      <div class="flex flex-col">
+        <label
+          for="{{ field.id_for_label }}"
+          class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2"
+        >
+          {{ field.label }}
+        </label>
+
+        {# Style des inputs pour correspondre à ton formulaire d'inscription #}
+        <div
+          class="border-b border-gray-100 focus-within:border-blue-600 transition-colors duration-0"
+        >
+          {{ field }}
+        </div>
+
+        {% if field.errors %}
+        <p class="text-[10px] text-red-500 lowercase mt-1">
+          {{ field.errors.0 }}
+        </p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="pt-10 flex flex-col md:flex-row gap-4">
+      <button
+        type="submit"
+        class="flex-1 py-4 bg-gray-900 text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-blue-600 transition-all duration-0"
+      >
+        enregistrer les modifications
+      </button>
+
+      <a
+        href="{% url 'my_course' %}"
+        class="flex-1 py-4 border border-gray-100 text-center text-gray-400 text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-50 hover:text-gray-900 transition-all duration-0"
+      >
+        annuler
+      </a>
+    </div>
+  </form>
+</div>
+
+<style>
+  /* Intégration du style pour les champs du formulaire générés par Django */
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 10px 0;
+    background: transparent;
+    border: none !important;
+    outline: none !important;
+    font-size: 0.875rem;
+  }
+
+  textarea {
+    min-height: 120px;
+  }
+</style>
+{% endblock %}

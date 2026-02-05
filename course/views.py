@@ -13,11 +13,11 @@ from django.contrib.auth.mixins import (
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.views.generic import (
-    TemplateView, ListView, DetailView, CreateView, DeleteView
+    TemplateView, ListView, DetailView, CreateView, DeleteView, UpdateView
 )
 from .forms import RegistrationForm, CreateCourseForm
 from .models import (
-    Category, Course, Reservation, User
+    Category, Course, Reservation
 )
 from django.contrib.auth.decorators import login_required, user_passes_test
 
@@ -122,12 +122,35 @@ class CreateCourseView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('list_course')
 
+class UpdateCourseView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Course
+    fields = ['title', 'description', 'prix', 'places']
+    template_name = 'course/course_update_form.html'
+    success_url = reverse_lazy('my_course')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            Course, 
+            slug=self.kwargs.get('slug'), 
+            teacher=self.request.user
+        )
+
+    def test_func(self):
+        course = self.get_object()
+        return self.request.user == course.teacher
+
+    def form_valid(self, form):
+        messages.success(self.request, 'les modifications ont été enregistrées.')
+        return super().form_valid(form)
+
+
 class MyCourseListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     login_url = 'login'
     model = Course
     template_name = 'course/my_course_list.html'
     context_object_name = 'courses'
     raise_exception = False
+    paginate_by = 3
 
     def test_func(self):
         return self.request.user.is_instructor
