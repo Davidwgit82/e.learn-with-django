@@ -25,7 +25,6 @@ class Course(SlugBaseModel, TimeStamp):
     is_active = models.BooleanField(default=True, verbose_name='ouvert aux inscriptions')
 
     @cached_property
-    @property
     def is_available(self):
         count = getattr(self, 'nb_inscrits', self.reserve_course.count())
         return self.is_active and count < self.places
