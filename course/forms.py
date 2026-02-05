@@ -21,13 +21,12 @@ class RegistrationForm(UserCreationForm):
     def clean_role(self):
         role = self.cleaned_data.get('role')
         if role not in dict(self.ROLE_CHOICES):
-            raise forms.ValidationError("Rôle invalide.")
+            raise forms.ValidationError("rôle invalide.")
         return role
 
     def save(self, commit=True):
         user = super().save(commit=False)
 
-        # Sécurité : reset explicite
         user.is_student = False
         user.is_instructor = False
 

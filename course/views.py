@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import (
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.views.generic import (
-    TemplateView, ListView, DetailView, CreateView
+    TemplateView, ListView, DetailView, CreateView, DeleteView
 )
 from .forms import RegistrationForm, CreateCourseForm
 from .models import (
@@ -147,6 +147,7 @@ class MyReservationListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = 'course/my_reservation_list.html'
     context_object_name = 'reservation'
     raise_exception = False
+    paginate_by = 3
 
     def test_func(self):
         return self.request.user.is_student
@@ -155,9 +156,9 @@ class MyReservationListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return Reservation.objects.filter(student=self.request.user).select_related(
             'course',          
             'course__category' 
-        )
-    
-class ReserveCourseView(LoginRequiredMixin, UserPassesTestMixin, View):
+        )    
+
+class CreateReservationView(LoginRequiredMixin, UserPassesTestMixin, View):
     raise_exception = True 
 
     def test_func(self):
@@ -199,3 +200,26 @@ class ReserveCourseView(LoginRequiredMixin, UserPassesTestMixin, View):
         return redirect(course.get_absolute_url())
 
 
+class DeleteReservationView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Reservation
+    template_name = 'course/course_confirm_delete.html'
+    success_url = reverse_lazy('my_reservation')
+
+    def get_object(self, queryset=None):
+        """
+        récupérer la réservation en utilisant le slug du cours
+        et l'étudiant connecté.
+        """
+        return get_object_or_404(
+            Reservation, 
+            course__slug=self.kwargs.get('slug'), 
+            student=self.request.user
+        )
+
+    def test_func(self):
+        reservation = self.get_object()
+        return self.request.user == reservation.student
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "votre inscription a été annulée.")
+        return super().delete(request, *args, **kwargs)

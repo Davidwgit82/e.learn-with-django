@@ -2,6 +2,7 @@ from django.db import models
 from .utils import SlugBaseModel, TimeStamp
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
+from django.utils.functional import cached_property
 
 class User(AbstractUser):
     is_instructor = models.BooleanField(default=False)
@@ -23,6 +24,7 @@ class Course(SlugBaseModel, TimeStamp):
     places = models.IntegerField()
     is_active = models.BooleanField(default=True, verbose_name='ouvert aux inscriptions')
 
+    @cached_property
     @property
     def is_available(self):
         count = getattr(self, 'nb_inscrits', self.reserve_course.count())
@@ -45,6 +47,8 @@ class Reservation(TimeStamp):
     """ empêcher l'etudiant de reserver un même cours deux fois. """
     class Meta:
         unique_together = ['student', 'course']
+        ordering = ['-created_at']
+        # ou 
 
     def __str__(self):
         return f'student {self.student.username} has reserved this course -> {self.course.title}'
