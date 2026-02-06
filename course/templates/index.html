@@ -174,8 +174,8 @@
               Status : <span class="font-bold">En ligne</span>
             </h2>
             <p class="text-[10px] text-stone-400 uppercase tracking-widest">
-              Connecté en tant que {{
-              user.is_instructor|yesno:"Instructeur,Étudiant" }}
+              Connecté en tant que 
+              {{ user.is_instructor|yesno:"Instructeur,Étudiant" }}
             </p>
           </div>
         </div>
@@ -183,8 +183,8 @@
         <div class="mt-8 md:mt-0 flex gap-12">
           <div class="text-center">
             <span class="block text-3xl font-light text-blue-600">
-              {% if user.is_instructor %}{{ user.course_teacher.count }}{% else
-              %}{{ user.enrollments.count }}{% endif %}
+              {% if user.is_instructor %}{{ user.course_teacher.count }}
+              {% else %}{{ user.enrollments.count }}{% endif %}
             </span>
             <span class="text-[9px] uppercase tracking-widest text-stone-400"
               >Activités</span
