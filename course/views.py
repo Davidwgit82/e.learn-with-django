@@ -1,8 +1,10 @@
 from django.db.models import Count
 from django.views import View
+from django.db import transaction
 from django.shortcuts import (
    get_object_or_404, redirect, render
 )
+from .permissions import is_student, is_instructor
 from django.contrib.auth.mixins import (
     LoginRequiredMixin, 
     UserPassesTestMixin
@@ -108,7 +110,7 @@ class CreateCourseView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     raise_exception = True
 
     def test_func(self):
-        return self.request.user.is_instructor
+        return is_instructor(self.request.user)
 
     def form_valid(self, form):
         form.instance.teacher = self.request.user
@@ -148,7 +150,7 @@ class MyCourseListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     paginate_by = 3
 
     def test_func(self):
-        return self.request.user.is_instructor
+        return is_instructor(self.request.user)
     
     def get_queryset(self):
         return Course.objects.filter(teacher=self.request.user).select_related(
@@ -168,7 +170,7 @@ class MyReservationListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     paginate_by = 3
 
     def test_func(self):
-        return self.request.user.is_student
+        return is_student(self.request.user)
     
     def get_queryset(self):
         return Reservation.objects.filter(student=self.request.user).select_related(
@@ -180,40 +182,33 @@ class CreateReservationView(LoginRequiredMixin, UserPassesTestMixin, View):
     raise_exception = True 
 
     def test_func(self):
-        return self.request.user.is_student
+        return is_student(self.request.user)
 
     def post(self, request, slug):
-        course = get_object_or_404(
-            Course,
-            slug=slug,
-            is_active=True
-        )
-        student = request.user
+        with transaction.atomic():
 
-        if Reservation.objects.filter(
-            student=student,
-            course=course
-        ).exists():
-            messages.warning(
-                request,
-                "vous avez déjà réservé ce cours."
+            course = Course.objects.select_for_update().get(
+                slug=slug,
+                is_active=True
             )
 
-        elif course.reserve_course.count() >= course.places:
-            messages.warning(
-                request,
-                "Ce cours est complet."
-            )
+            student = request.user
 
-        else:
-            Reservation.objects.create(
+            if Reservation.objects.filter(
                 student=student,
                 course=course
-            )
-            messages.success(
-                request,
-                "Réservation effectuée."
-            )
+            ).exists():
+                messages.warning(request, "Vous avez déjà réservé ce cours.")
+
+            elif course.reserve_course.count() >= course.places:
+                messages.warning(request, "Ce cours est complet.")
+
+            else:
+                Reservation.objects.create(
+                    student=student,
+                    course=course
+                )
+                messages.success(request, "Réservation effectuée avec succès.")
 
         return redirect(course.get_absolute_url())
 
@@ -234,5 +229,5 @@ class DeleteReservationView(LoginRequiredMixin, UserPassesTestMixin, DeleteView)
         return self.request.user == reservation.student
 
     def delete(self, request, *args, **kwargs):
-        messages.success(self.request, "votre inscription a été annulée.")
+        messages.success(self.request, "inscription annulée.")
         return super().delete(request, *args, **kwargs)
