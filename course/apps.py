@@ -6,7 +6,7 @@ class CourseConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'course'
 
-    '''def ready(self):
+    def ready(self):
         from django.contrib.auth import get_user_model
         import os
 
@@ -18,4 +18,3 @@ class CourseConfig(AppConfig):
         if not User.objects.filter(username=username).exists():
             User.objects.create_superuser(username, email, password)
             print(f"Superuser {username} créé avec succès !")
-'''
