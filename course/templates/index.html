@@ -1,63 +1,113 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 <div class="max-w-6xl mx-auto px-6 py-12">
-  
   <header class="mb-20 text-center md:text-left relative">
-    <div class="inline-block px-3 py-1 border border-blue-100 mb-6">
-        <span class="text-[9px] font-bold uppercase tracking-[0.3em] text-blue-600">E-learn Platform 2.0</span>
-    </div>
-    <h1 class="text-5xl md:text-7xl font-light tracking-tighter text-gray-900 mb-6">
-      Libérez votre <br/>
-      <span class="font-bold italic text-blue-600">potentiel infini.</span>
+    <h1
+      class="text-5xl md:text-7xl font-light tracking-tighter text-gray-900 mb-6"
+    >
+      Des cours, quand vous voulez.<br />
     </h1>
     <p class="max-w-xl text-stone-500 italic text-sm leading-relaxed mb-8">
-        Que vous soyez ici pour forger de nouvelles compétences ou pour guider la prochaine génération, easi/learn est votre quartier général.
+      Que vous soyez apprenant ou formateur, créer, gérer et réserver ou
+      participer à des cours simplement.
     </p>
+
     <div class="h-px w-40 bg-gray-900"></div>
   </header>
 
   <section class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-24">
-    <div class="p-10 bg-white border border-stone-100 group hover:border-blue-600 transition-all duration-300">
-        <div class="w-12 h-12 bg-blue-50 flex items-center justify-center mb-6 group-hover:bg-blue-600 transition-colors">
-            <svg class="w-6 h-6 text-blue-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
-        </div>
-        <h2 class="text-xs font-bold uppercase tracking-[0.2em] mb-4">Mode : Super Étudiant</h2>
-        <ul class="space-y-3">
-            <li class="text-[11px] text-stone-400 uppercase tracking-wide flex items-center">
-                <span class="w-1 h-1 bg-blue-600 mr-2"></span> Exploration illimitée du catalogue
-            </li>
-            <li class="text-[11px] text-stone-400 uppercase tracking-wide flex items-center">
-                <span class="w-1 h-1 bg-blue-600 mr-2"></span> Réservation instantanée en 1-clic
-            </li>
-            <li class="text-[11px] text-stone-400 uppercase tracking-wide flex items-center">
-                <span class="w-1 h-1 bg-blue-600 mr-2"></span> Gestion et désistement flexible
-            </li>
-        </ul>
+    <div
+      class="p-10 bg-white border border-stone-100 group hover:border-blue-600 transition-all duration-300"
+    >
+      <div
+        class="w-12 h-12 bg-blue-50 flex items-center justify-center mb-6 group-hover:bg-blue-600 transition-colors"
+      >
+        <svg
+          class="w-6 h-6 text-blue-600 group-hover:text-white"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path d="M12 14l9-5-9-5-9 5 9 5z" />
+          <path
+            d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
+          />
+        </svg>
+      </div>
+      <h2 class="text-xs font-bold uppercase tracking-[0.2em] mb-4">
+        Mode : Étudiant
+      </h2>
+      <ul class="space-y-3">
+        <li
+          class="text-[11px] text-stone-400 uppercase tracking-wide flex items-center"
+        >
+          <span class="w-1 h-1 bg-blue-600 mr-2"></span> Exploration illimitée
+          du catalogue
+        </li>
+        <li
+          class="text-[11px] text-stone-400 uppercase tracking-wide flex items-center"
+        >
+          <span class="w-1 h-1 bg-blue-600 mr-2"></span> Réservation instantanée
+          en 1-clic
+        </li>
+        <li
+          class="text-[11px] text-stone-400 uppercase tracking-wide flex items-center"
+        >
+          <span class="w-1 h-1 bg-blue-600 mr-2"></span> Gestion et désistement
+          flexible
+        </li>
+      </ul>
     </div>
 
-    <div class="p-10 bg-gray-900 group hover:bg-blue-700 transition-all duration-500">
-        <div class="w-12 h-12 bg-gray-800 flex items-center justify-center mb-6">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        </div>
-        <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-white mb-4">Mode : Super Mentor</h2>
-        <ul class="space-y-3">
-            <li class="text-[11px] text-stone-400 uppercase tracking-wide flex items-center">
-                <span class="w-1 h-1 bg-blue-400 mr-2"></span> Création de programmes d'élite
-            </li>
-            <li class="text-[11px] text-stone-400 uppercase tracking-wide flex items-center">
-                <span class="w-1 h-1 bg-blue-400 mr-2"></span> Contrôle total sur vos contenus
-            </li>
-        </ul>
+    <div
+      class="p-10 bg-gray-900 group hover:bg-blue-700 transition-all duration-500"
+    >
+      <div class="w-12 h-12 bg-gray-800 flex items-center justify-center mb-6">
+        <svg
+          class="w-6 h-6 text-white"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      </div>
+      <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-white mb-4">
+        Mode : Instructeur
+      </h2>
+      <ul class="space-y-3">
+        <li
+          class="text-[11px] text-stone-400 uppercase tracking-wide flex items-center"
+        >
+          <span class="w-1 h-1 bg-blue-400 mr-2"></span> Création de programmes
+        </li>
+        <li
+          class="text-[11px] text-stone-400 uppercase tracking-wide flex items-center"
+        >
+          <span class="w-1 h-1 bg-blue-400 mr-2"></span> Contrôle total sur vos
+          contenus
+        </li>
+      </ul>
     </div>
   </section>
 
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
     <aside class="lg:col-span-1">
-      <h2 class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-8">Univers</h2>
+      <h2
+        class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-8"
+      >
+        Univers
+      </h2>
       <ul class="space-y-6">
         {% for cats in categories %}
         <li>
-          <a href="{% url 'list_course' %}?category={{ cats.slug }}" class="group text-sm text-stone-600 hover:text-blue-600 transition-all flex items-center">
-            <span class="text-[10px] mr-3 opacity-0 group-hover:opacity-100 transition-opacity">0{{ forloop.counter }}.</span>
+          <a
+            href="{% url 'list_course' %}?category={{ cats.slug }}"
+            class="group text-sm text-stone-600 hover:text-blue-600 transition-all flex items-center"
+          >
+            <span
+              class="text-[10px] mr-3 opacity-0 group-hover:opacity-100 transition-opacity"
+              >0{{ forloop.counter }}.</span
+            >
             {{ cats.name }}
           </a>
         </li>
@@ -66,55 +116,89 @@
     </aside>
 
     <div class="lg:col-span-3">
-      <div class="flex justify-between items-end mb-12 border-b border-gray-100 pb-4">
+      <div
+        class="flex justify-between items-end mb-12 border-b border-gray-100 pb-4"
+      >
         <h2 class="text-2xl font-light italic">Cours récents</h2>
-        <a href="{% url 'list_course' %}" class="text-[10px] font-bold uppercase tracking-widest text-blue-600 hover:text-black">Tout explorer &rarr;</a>
+        <a
+          href="{% url 'list_course' %}"
+          class="text-[10px] font-bold uppercase tracking-widest text-blue-600 hover:text-black"
+          >Tout explorer &rarr;</a
+        >
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
         {% for course in courses %}
-        <div class="relative bg-white p-8 border border-stone-100 hover:border-gray-900 transition-all duration-0">
+        <div
+          class="relative bg-white p-8 border border-stone-100 hover:border-gray-900 transition-all duration-0"
+        >
           <div class="absolute top-0 right-0 p-4">
-              <span class="text-[9px] font-bold text-gray-300 italic">#{{ forloop.counter }}</span>
+            <span class="text-[9px] font-bold text-gray-300 italic"
+              >#{{ forloop.counter }}</span
+            >
           </div>
-          <span class="text-[9px] font-bold text-blue-600 uppercase tracking-widest block mb-4">{{ course.category.name }}</span>
-          <h3 class="text-xl font-medium text-gray-900 mb-6">{{ course.title }}</h3>
-          
-          <div class="flex justify-between items-center pt-6 border-t border-stone-50">
-              <span class="text-sm font-bold italic">{{ course.prix }} FCFA</span>
-              <a href="{{ course.get_absolute_url }}" class="text-[10px] font-bold uppercase tracking-widest bg-gray-900 text-white px-4 py-2 hover:bg-blue-600 transition-colors duration-0">Détails</a>
+          <span
+            class="text-[9px] font-bold text-blue-600 uppercase tracking-widest block mb-4"
+            >{{ course.category.name }}</span
+          >
+          <h3 class="text-xl font-medium text-gray-900 mb-6">
+            {{ course.title }}
+          </h3>
+
+          <div
+            class="flex justify-between items-center pt-6 border-t border-stone-50"
+          >
+            <span class="text-sm font-bold italic">{{ course.prix }} FCFA</span>
+            <a
+              href="{{ course.get_absolute_url }}"
+              class="text-[10px] font-bold uppercase tracking-widest bg-gray-900 text-white px-4 py-2 hover:bg-blue-600 transition-colors duration-0"
+              >Détails</a
+            >
           </div>
         </div>
         {% endfor %}
       </div>
 
       {% if user.is_authenticated %}
-      <div class="mt-24 p-12 bg-white border border-stone-200 flex flex-col md:flex-row items-center justify-between">
+      <div
+        class="mt-24 p-12 bg-white border border-stone-200 flex flex-col md:flex-row items-center justify-between"
+      >
         <div class="flex items-center gap-6">
-            <div class="w-16 h-16 rounded-full bg-stone-100 flex items-center justify-center text-xl font-bold text-blue-600">
-                {{ user.username|first|upper }}
-            </div>
-            <div>
-                <h2 class="text-lg font-light italic">Status : <span class="font-bold">En ligne</span></h2>
-                <p class="text-[10px] text-stone-400 uppercase tracking-widest">Connecté en tant que {{ user.is_instructor|yesno:"Instructeur,Étudiant" }}</p>
-            </div>
+          <div
+            class="w-16 h-16 rounded-full bg-stone-100 flex items-center justify-center text-xl font-bold text-blue-600"
+          >
+            {{ user.username|first|upper }}
+          </div>
+          <div>
+            <h2 class="text-lg font-light italic">
+              Status : <span class="font-bold">En ligne</span>
+            </h2>
+            <p class="text-[10px] text-stone-400 uppercase tracking-widest">
+              Connecté en tant que {{
+              user.is_instructor|yesno:"Instructeur,Étudiant" }}
+            </p>
+          </div>
         </div>
-        
+
         <div class="mt-8 md:mt-0 flex gap-12">
-            <div class="text-center">
-                <span class="block text-3xl font-light text-blue-600">
-                    {% if user.is_instructor %}{{ user.course_teacher.count }}{% else %}{{ user.enrollments.count }}{% endif %}
-                </span>
-                <span class="text-[9px] uppercase tracking-widest text-stone-400">Activités</span>
-            </div>
-            <a href="{% if user.is_instructor %}{% url 'my_course' %}{% else %}{% url 'my_reservation' %}{% endif %}" 
-               class="self-center px-8 py-4 border border-gray-900 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-900 hover:text-white transition-all duration-0">
-                Mon Espace
-            </a>
+          <div class="text-center">
+            <span class="block text-3xl font-light text-blue-600">
+              {% if user.is_instructor %}{{ user.course_teacher.count }}{% else
+              %}{{ user.enrollments.count }}{% endif %}
+            </span>
+            <span class="text-[9px] uppercase tracking-widest text-stone-400"
+              >Activités</span
+            >
+          </div>
+          <a
+            href="{% if user.is_instructor %}{% url 'my_course' %}{% else %}{% url 'my_reservation' %}{% endif %}"
+            class="self-center px-8 py-4 border border-gray-900 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-900 hover:text-white transition-all duration-0"
+          >
+            Mon Espace
+          </a>
         </div>
       </div>
       {% endif %}
-
     </div>
   </div>
 </div>
