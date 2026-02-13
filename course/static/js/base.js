@@ -22,7 +22,7 @@ async function navigate(url, push = true) {
     const res = await fetch(url, {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
-        "X-CSRFToken": getCSRFToken(), // Inclus par sécurité
+        "X-CSRFToken": getCSRFToken(), 
       },
     });
 
@@ -33,9 +33,8 @@ async function navigate(url, push = true) {
 
     if (push) history.pushState({}, "", url);
   } catch (err) {
-    console.error("Navigation error:", err);
-    // Optionnel : redirection classique si l'AJAX échoue
-    // window.location.href = url;
+    console.warn("Échec AJAX, redirection classique...", err);
+    window.location.href = url; 
   }
 }
 

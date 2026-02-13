@@ -1,4 +1,5 @@
 from django.db.models import Count
+from django.http import HttpResponseForbidden
 from django.views import View
 from django.db import transaction
 from django.shortcuts import (
@@ -178,6 +179,12 @@ class MyReservationListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
             'course__category' 
         )    
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated or not is_student(self.request.user):
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return HttpResponseForbidden("vous n'avez pas acces a cette page")
+        return super().dispatch(request, *args, **kwargs)
+    
 class CreateReservationView(LoginRequiredMixin, UserPassesTestMixin, View):
     raise_exception = True 
 

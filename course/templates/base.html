@@ -3,15 +3,68 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% block title %}
-    <title>home | learn online</title>
-    {% endblock %} {% load static %}
+
+    {% block seo %}
+    <title>
+      {% block title %}e.learn | Plateforme de cours en ligne toutes
+      thématiques{% endblock %}
+    </title>
+    <meta
+      name="description"
+      content="Apprenez à votre rythme sur e.learn. Découvrez des cours en ligne dans tous les domaines : programmation, design, business et bien plus encore."
+    />
+    <meta
+      name="keywords"
+      content="cours en ligne, formation, apprendre en ligne, e-learning, formation continue, tutoriels"
+    />
+    <meta name="robots" content="index, follow" />
+    {% endblock %}
+
+    <meta
+      property="og:title"
+      content="e.learn | Apprenez ce que vous voulez, où vous voulez"
+    />
+    <meta
+      property="og:description"
+      content="Accédez à des centaines de formations en ligne sur la plateforme e.learn."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+    <meta property="og:image" content="{% static 'images/og-preview.jpg' %}" />
+
+    {% load static %}
     <script src="https://cdn.tailwindcss.com"></script>
     {% block css %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    {% endblock %} {% block extra_css %}{% endblock %} {% block extra_js %}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": "{{ course.title }}",
+        "description": "{{ course.description|truncatewords:30 }}",
+        "provider": {
+          "@type": "Organization",
+          "name": "e.learn",
+          "sameAs": "{{ request.scheme }}://{{ request.get_host }}"
+        },
+        "image": "{{ course.image.url }}",
+        "offers": [
+          {
+            "@type": "Offer",
+            "category": "Paid",
+            "price": "{{ course.price }}",
+            "priceCurrency": "EUR"
+          }
+        ],
+        "hasCourseInstance": {
+          "@type": "CourseInstance",
+          "courseMode": "Online",
+          "instructor": "{{ course.instructor.username }}"
+        }
+      }
+    </script>
     {% endblock %}
-
-    {% block extra_css %}{% endblock %}
   </head>
   <body
     class="bg-stone-50 text-gray-900 font-sans selection:bg-blue-100 text-gray-900"
