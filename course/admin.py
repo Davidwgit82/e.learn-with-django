@@ -4,7 +4,6 @@ from django.db.models import Count
 
 from .models import User, Category, Course, Reservation
 
-
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
@@ -24,11 +23,11 @@ class CustomUserAdmin(UserAdmin):
         'is_staff', 'is_superuser'
     )
 
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
-
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -42,6 +41,7 @@ class CourseAdmin(admin.ModelAdmin):
         'places',
         'availability_display',
         'prix',
+        'video_file',
     )
 
     list_filter = ('is_active', 'category')
@@ -57,7 +57,7 @@ class CourseAdmin(admin.ModelAdmin):
             'fields': ('is_active', 'availability_display'),
         }),
         ('Info general', {
-            'fields': ('title', 'teacher', 'category', 'description'),
+            'fields': ('title', 'teacher', 'category', 'description', 'video_file'),
         }),
         ('Logistique & prix', {
             'fields': ('prix', 'places', 'nb_inscrits_display'),
@@ -76,7 +76,6 @@ class CourseAdmin(admin.ModelAdmin):
     def availability_display(self, obj):
         return obj.is_available
     
-
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
     list_display = ('student', 'course', 'created_at')

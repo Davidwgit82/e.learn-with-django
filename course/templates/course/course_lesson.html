@@ -1,0 +1,86 @@
+{% extends 'base.html' %} {% load static %} {% block title %}
+<title>Leçon | {{ course.title }}</title>
+{% endblock %} {% block content %}
+<div class="max-w-6xl mx-auto px-6 py-16">
+  {% if messages %}
+  <div id="messages" class="messages-container mb-8">
+    {% for message in messages %}
+    <div
+      class="alert alert-{{ message.tags }}"
+      style="padding: 10px; margin-bottom: 10px; border: 1px solid"
+    >
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- En-tête -->
+  <div class="mb-8">
+    <a
+      href="{% url 'course_detail' course.slug %}"
+      class="text-blue-600 hover:text-blue-800 text-sm font-medium mb-4 inline-block"
+    >
+      ← Retour aux détails du cours
+    </a>
+    <h1 class="text-4xl font-light text-gray-900 mb-2">{{ course.title }}</h1>
+    <p class="text-gray-600">{{ course.description|truncatewords:30 }}</p>
+  </div>
+
+  <!-- Lecteur vidéo -->
+  <div class="bg-black rounded-lg overflow-hidden shadow-2xl mb-8">
+    <video
+      controls
+      controlsList="nodownload"
+      class="w-full h-auto"
+      style="max-height: 600px"
+    >
+      <source src="{{ course.video_file.url }}" type="video/mp4" />
+      Votre navigateur ne supporte pas la lecture de vidéos.
+    </video>
+  </div>
+
+  <!-- Informations supplémentaires -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-2">
+      <h3
+        class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4"
+      >
+        Description complète
+      </h3>
+      <div class="text-gray-600 leading-relaxed">
+        {{ course.description|linebreaks }}
+      </div>
+    </div>
+
+    <aside class="border border-gray-100 p-6 bg-white shadow-sm h-fit">
+      <h3
+        class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4 border-b pb-2"
+      >
+        Informations
+      </h3>
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between">
+          <span class="text-gray-500">Professeur</span>
+          <span class="font-medium text-gray-900"
+            >{{ course.author.username }}</span
+          >
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Étudiants</span>
+          <span class="font-medium text-gray-900"
+            >{{ course.nb_inscrits }}</span
+          >
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Prix</span>
+          <span class="font-medium text-gray-900">
+            {% if course.prix == 0 %} Gratuit {% else %} {{ course.prix }} FCFA
+            {% endif %}
+          </span>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}

@@ -43,7 +43,7 @@ class RegistrationForm(UserCreationForm):
 class CreateCourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ('category', 'title', 'description', 'prix', 'places', 'is_active')
+        fields = ('category', 'title', 'description', 'prix', 'places', 'video_file', 'is_active')
         widgets = {
             'is_active': forms.RadioSelect(
                 choices=[(True, 'Disponible'), (False, 'Indisponible')]

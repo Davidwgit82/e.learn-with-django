@@ -95,13 +95,22 @@
           action="{% url 'reserve_a_course' course.slug %}"
           class="w-full"
         >
-          {% csrf_token %}
-          <button
-            type="submit"
+          {% csrf_token %} {% if course.video_file %}
+          <a
+            href="{% url 'course_lesson' course.slug %}"
             class="inline-block w-full text-center py-4 bg-blue-600 text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-900 transition-colors duration-0"
           >
             participer
+          </a>
+          {% else %}
+          <button
+            type="button"
+            disabled
+            class="inline-block w-full text-center py-4 bg-gray-400 text-white text-xs font-bold uppercase"
+          >
+            ce prof n'a pas de vidéo
           </button>
+          {% endif %}
         </form>
 
         {% else %}

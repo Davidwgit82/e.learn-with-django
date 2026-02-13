@@ -3,6 +3,7 @@ from .utils import SlugBaseModel, TimeStamp
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.core.validators import FileExtensionValidator
 
 class User(AbstractUser):
     is_instructor = models.BooleanField(default=False)
@@ -23,6 +24,19 @@ class Course(SlugBaseModel, TimeStamp):
     prix = models.DecimalField(max_digits=6, decimal_places=0, default=0)
     places = models.IntegerField()
     is_active = models.BooleanField(default=True, verbose_name='ouvert aux inscriptions')
+    video_file = models.FileField(
+        upload_to='courses/lessons/%Y/%m/%d',
+        max_length=1000,
+        blank=True,
+        null=True,
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=['mp4', 'webm', 'mkv'],
+                message='cette extension n\'est pas prise en charge. \n' \
+                'le fichier doit en format  .mp4, .webm ou .mkv.',
+            ),
+        ]
+    )
 
     @cached_property
     def is_available(self):

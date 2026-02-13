@@ -122,7 +122,7 @@ class CreateCourseView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 class UpdateCourseView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Course
-    fields = ['title', 'description', 'prix', 'places']
+    fields = ['title', 'description', 'prix', 'places', 'video_file']
     template_name = 'course/course_update_form.html'
     success_url = reverse_lazy('my_course')
 
@@ -231,3 +231,30 @@ class DeleteReservationView(LoginRequiredMixin, UserPassesTestMixin, DeleteView)
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "inscription annulée.")
         return super().delete(request, *args, **kwargs)
+
+class CourseLessonView(LoginRequiredMixin, UserPassesTestMixin, View):
+    raise_exception = True
+    
+    def test_func(self):
+        return is_student(self.request.user)
+    
+    def get(self, request, slug):
+        course = get_object_or_404(Course, slug=slug, is_active=True)
+        
+        has_reservation = Reservation.objects.filter(
+            student=request.user,
+            course=course
+        ).exists()
+        
+        if not has_reservation:
+            messages.warning(request, "Vous devez d'abord réserver ce cours.")
+            return redirect(course.get_absolute_url())
+        
+        if not course.video_file:
+            messages.error(request, "Ce cours n'a pas encore de contenu vidéo.")
+            return redirect(course.get_absolute_url())
+        
+        context = {
+            'course': course,
+        }
+        return render(request, 'course_lesson.html', context)
